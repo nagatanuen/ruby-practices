@@ -5,12 +5,7 @@ require 'date'
 
 class MyCalendar
   def initialize
-    begin
-      setYearAndMonth
-    rescue => e
-      puts e.message
-      exit
-    end
+    setYearAndMonth
   end
 
   def show
