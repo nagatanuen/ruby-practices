@@ -11,38 +11,27 @@ class MyCalendar
   def show
     # 年・月・曜日
     puts "#{@month}月 #{@year}".center(20)
-    puts '日 月 火 水 木 金 土'
+    puts "\e[31m日\e[m 月 火 水 木 金 \e[34m土\e[m"
 
-    # 日にち
-    day = 1
-    date = Date.new(@year, @month, day)
+    # その月の最終日
+    last_date = Date.new(@year, @month, -1)
+    (1..last_date.day).each do |day|
+      date = Date.new(@year, @month, day)
 
-    # 初週
-    row = day.to_s.rjust(2)
-    (6 - date.wday).times do
-      day += 1
-      row += ' '
-      row += "#{day.to_s.rjust(2)}"
-    end
-    puts row.rjust(20)
+      # 初日の出力位置までスペースで埋める
+      print '   ' * date.wday if day == 1
 
-    # 2週目以降
-    while Date.valid_date?(@year, @month, day)
-      row = ''
-
-      # 1週(7日)ずつ作成していく
-      7.times do
-        day += 1
-
-        # 次の日付が有効でなくなったら最終行を出力して終了
-        unless Date.valid_date?(@year, @month, day) then
-          puts row.ljust(20)
-          return
-        end
-        row += "#{day.to_s.rjust(2)}"
-        row += ' '
+      case date.wday
+      when 0 then # 日曜日は赤色で出力
+        printf("\e[%dm%2d\e[m ", 31, day)
+      when 6 then # 土曜日は青色で改行して出力
+        printf("\e[%dm%2d\e[m\n", 34, day)
+      else # 月〜金
+        printf("%2d ", day)
       end
-      puts row.rjust(20)
+
+      # 月の最終日なら改行する(土曜日なら改行済みなのでやらない)
+      puts if day == last_date.day && date.wday != 6
     end
   end
 
