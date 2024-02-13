@@ -5,7 +5,7 @@ require 'date'
 
 class MyCalendar
   def initialize
-    setYearAndMonth
+    set_year_and_month
   end
 
   def show
@@ -37,7 +37,7 @@ class MyCalendar
 
   private
 
-  def setYearAndMonth
+  def set_year_and_month
     # 年の有効範囲を1970〜2100に限定する
     year_regex = /\A(19[7-9][0-9]{1}|20[0-9]{2}|2100)\z/
     # 月の有効範囲を1〜12に限定する
