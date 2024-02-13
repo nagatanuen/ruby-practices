@@ -4,9 +4,6 @@ require 'optparse'
 require 'date'
 
 class MyCalendar
-
-  attr_reader :year, :month
-
   def initialize
     begin
       setYearAndMonth
