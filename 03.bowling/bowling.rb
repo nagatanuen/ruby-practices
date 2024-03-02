@@ -16,8 +16,8 @@ class MyBowling
       break if i == 9
 
       # ストライクまたはスペアのボーナスを加算する
-      total_score += get_strike_bonus(i) if strike?(frame)
-      total_score += get_spare_bonus(i) if spare?(frame)
+      total_score += calc_strike_bonus(i) if strike?(frame)
+      total_score += calc_spare_bonus(i) if spare?(frame)
 
       # puts "#{i}: #{@frames[i]}: #{total_score}"
     end
@@ -37,7 +37,7 @@ class MyBowling
   end
 
   # ストライクのボーナス点を返す
-  def get_strike_bonus(index)
+  def calc_strike_bonus(index)
     # 次のフレームもストライクの場合は、次の次のフレームの1投目のスコアも加算する
     bonus = 0
     if @frames[index + 1][0] == 10
@@ -51,7 +51,7 @@ class MyBowling
   end
 
   # スペアのボーナス点を返す
-  def get_spare_bonus(index)
+  def calc_spare_bonus(index)
     @frames[index + 1][0]
   end
 
