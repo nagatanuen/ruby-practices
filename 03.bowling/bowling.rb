@@ -2,8 +2,8 @@
 # frozen_string_literal: true
 
 class MyBowling
-  def initialize
-    create_frames
+  def initialize(text)
+    create_frames(text)
   end
 
   # スコア計算結果を返す
@@ -56,8 +56,8 @@ class MyBowling
   end
 
   # 引数をパースして1投ごとの結果を得る
-  def create_frames
-    scores = ARGV[0].split(/,/)
+  def create_frames(text)
+    scores = text.split(/,/)
     scores.map! { |x| x == 'X' ? 10 : x.to_i }
     # 1投ごとの結果をフレームにセットする
     @frames = []
@@ -79,5 +79,5 @@ class MyBowling
   end
 end
 
-bowling = MyBowling.new
+bowling = MyBowling.new(ARGV[0])
 bowling.result
