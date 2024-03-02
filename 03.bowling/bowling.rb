@@ -40,19 +40,22 @@ class MyBowling
   def calc_strike_bonus(index)
     # 次のフレームもストライクの場合は、次の次のフレームの1投目のスコアも加算する
     bonus = 0
-    if @frames[index + 1][0] == 10
+    next_frame = @frames[index + 1]
+    next_next_frame = @frames[index + 2]
+    if next_frame[0] == 10
       bonus += 10
       # 9フレーム目だけ10フレーム目の2投目を加算する
-      bonus += index < 8 ? @frames[index + 2][0] : @frames[index + 1][1]
+      bonus += index < 8 ? next_next_frame[0] : next_frame[1]
     else
-      bonus += @frames[index + 1][0] + @frames[index + 1][1]
+      bonus += next_frame[0] + next_frame[1]
     end
     bonus
   end
 
   # スペアのボーナス点を返す
   def calc_spare_bonus(index)
-    @frames[index + 1][0]
+    next_frame = @frames[index + 1]
+    next_frame[0]
   end
 
   # 引数をパースして1投ごとの結果を得る
