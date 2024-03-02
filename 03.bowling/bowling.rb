@@ -6,37 +6,30 @@ class MyBowling
     create_frames(text)
   end
 
-  # スコア計算結果を返す
   def result
     total_score = 0
     @frames.each_with_index do |frame, i|
       total_score += frame.sum
 
-      # 以降の処理は10フレーム目はやらない
+      # 10フレーム目はボーナスの加算がないので抜ける
       break if i == 9
 
-      # ストライクまたはスペアのボーナスを加算する
       total_score += calc_strike_bonus(i) if strike?(frame)
       total_score += calc_spare_bonus(i) if spare?(frame)
-
-      # puts "#{i}: #{@frames[i]}: #{total_score}"
     end
     puts total_score
   end
 
   private
 
-  # ストライクかどうかを返す
   def strike?(frame)
     frame[0] == 10
   end
 
-  # スペアかどうかを返す
   def spare?(frame)
     !strike?(frame) && frame.sum == 10
   end
 
-  # ストライクのボーナス点を返す
   def calc_strike_bonus(index)
     # 次のフレームもストライクの場合は、次の次のフレームの1投目のスコアも加算する
     bonus = 0
@@ -52,7 +45,6 @@ class MyBowling
     bonus
   end
 
-  # スペアのボーナス点を返す
   def calc_spare_bonus(index)
     next_frame = @frames[index + 1]
     next_frame[0]
@@ -67,13 +59,11 @@ class MyBowling
     10.times do |i|
       first = scores.shift
       if i < 9
-        # 1〜9フレーム
         second = first == 10 ? 0 : scores.shift
         @frames[i] = [first, second]
       else
-        # 10フレーム
         second = scores.shift
-        # 1投目がストライクもしくは2投目がスペアだった場合、3投目が投げられる
+        # 10フレーム目1投目がストライクもしくは2投目がスペアだった場合、3投目が投げられる
         third = first == 10 || first + second == 10 ? scores.shift : 0
         @frames[i] = [first, second, third]
       end
