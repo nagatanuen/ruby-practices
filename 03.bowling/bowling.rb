@@ -72,7 +72,7 @@ class MyBowling
         # 10フレーム
         second = scores.shift
         # 1投目がストライクもしくは2投目がスペアだった場合、3投目が投げられる
-        third = scores.shift if first == 10 || (first + second) >= 10
+        third = scores.shift if first == 10 || first + second == 10
         @frames[i] = [first, second, third]
       end
     end
