@@ -61,7 +61,7 @@ class MyBowling
   # 引数をパースして1投ごとの結果を得る
   def create_frames(text)
     text_array = text.split(',')
-    scores = text_array.map! { |s| s == 'X' ? 10 : s.to_i }
+    scores = text_array.map { |s| s == 'X' ? 10 : s.to_i }
     # 1投ごとの結果をフレームにセットする
     @frames = []
     10.times do |i|
