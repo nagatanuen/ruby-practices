@@ -65,17 +65,16 @@ class MyBowling
     # 1投ごとの結果をフレームにセットする
     @frames = []
     10.times do |i|
-      second = third = 0
       first = scores.shift
       if i < 9
         # 1〜9フレーム
-        second = scores.shift if first != 10
+        second = first == 10 ? 0 : scores.shift
         @frames[i] = [first, second]
       else
         # 10フレーム
         second = scores.shift
         # 1投目がストライクもしくは2投目がスペアだった場合、3投目が投げられる
-        third = scores.shift if first == 10 || first + second == 10
+        third = first == 10 || first + second == 10 ? scores.shift : 0
         @frames[i] = [first, second, third]
       end
     end
