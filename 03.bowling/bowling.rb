@@ -42,8 +42,7 @@ class MyBowling
   end
 
   def calc_spare_bonus(index)
-    next_frame = @frames[index + 1]
-    next_frame[0]
+    @frames[index + 1][0]
   end
 
   def create_frames(text)
