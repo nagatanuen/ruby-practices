@@ -3,7 +3,7 @@
 
 class MyBowling
   def initialize(text)
-    create_frames(text)
+    @frames = create_frames(text)
   end
 
   def result
@@ -49,18 +49,19 @@ class MyBowling
   def create_frames(text)
     text_array = text.split(',')
     scores = text_array.map { |s| s == 'X' ? 10 : s.to_i }
-    @frames = []
+    frames = []
     10.times do |i|
       first = scores.shift
       if i < 9
         second = first == 10 ? 0 : scores.shift
-        @frames[i] = [first, second]
+        frames[i] = [first, second]
       else
         second = scores.shift
         third = first == 10 || first + second == 10 ? scores.shift : 0
-        @frames[i] = [first, second, third]
+        frames[i] = [first, second, third]
       end
     end
+    frames
   end
 end
 
