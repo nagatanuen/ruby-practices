@@ -30,11 +30,11 @@ class MyBowling
   def calc_strike_bonus(index)
     bonus = 0
     next_frame = @frames[index + 1]
-    next_next_frame = @frames[index + 2]
+    after_next_frame = @frames[index + 2]
     if next_frame[0] == 10
       bonus += 10
       # 9フレーム目だけ10フレーム目の2投目を加算する
-      bonus += index < 8 ? next_next_frame[0] : next_frame[1]
+      bonus += index < 8 ? after_next_frame[0] : next_frame[1]
     else
       bonus += next_frame[0] + next_frame[1]
     end
