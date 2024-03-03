@@ -36,7 +36,7 @@ class MyBowling
       # 9フレーム目だけ10フレーム目の2投目を加算する
       bonus += index < 8 ? after_next_frame[0] : next_frame[1]
     else
-      bonus += next_frame[0] + next_frame[1]
+      bonus += next_frame[0..1].sum
     end
     bonus
   end
