@@ -14,7 +14,7 @@ class MyBowling
       total_score += calc_strike_bonus(i) if strike?(frame)
       total_score += calc_spare_bonus(i) if spare?(frame)
     end
-    puts total_score
+    total_score
   end
 
   private
@@ -65,4 +65,4 @@ class MyBowling
 end
 
 bowling = MyBowling.new(ARGV[0])
-bowling.result
+puts bowling.result
