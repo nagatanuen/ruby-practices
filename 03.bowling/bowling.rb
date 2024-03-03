@@ -57,7 +57,7 @@ class MyBowling
         frames[i] = [first, second]
       else
         second = scores.shift
-        third = first == 10 || first + second == 10 ? scores.shift : 0
+        third = first + second >= 10 ? scores.shift : 0
         frames[i] = [first, second, third]
       end
     end
