@@ -1,8 +1,6 @@
 #!/usr/bin/ruby
 # frozen_string_literal: true
 
-require 'debug'
-
 class Ls
   CURRENT_PATH = '.'
   MAX_COLUMN = 3
