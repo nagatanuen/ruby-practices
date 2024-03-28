@@ -23,17 +23,17 @@ class Ls
     return 'エラー：指定されたディレクトリが存在しません' unless valid_path?
 
     max_row = calc_max_row(files)
-    filelist = Array.new(max_row) { Array.new(MAX_COLUMN) }
+    table = Array.new(max_row) { Array.new(MAX_COLUMN) }
     i = 0
     MAX_COLUMN.times do |c|
       max_row.times do |r|
-        filelist[r][c] = files[i]
+        table[r][c] = files[i]
         i += 1
       end
     end
 
     output = ''
-    filelist.each do |row|
+    table.each do |row|
       row.each do |f|
         output += format("%-#{calc_column_width(files)}s", f)
         output += "\t"
