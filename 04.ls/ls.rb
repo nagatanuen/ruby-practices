@@ -1,6 +1,5 @@
 #!/usr/bin/ruby
 # frozen_string_literal: true
-
 class Ls
   CURRENT_PATH = '.'
   MAX_COLUMN = 3
@@ -10,7 +9,7 @@ class Ls
   end
 
   def display
-    display_without_option(files)
+    display_without_option
   end
 
   private
@@ -20,7 +19,9 @@ class Ls
     dir.children.sort
   end
 
-  def display_without_option(files)
+  def display_without_option
+    return 'エラー：指定されたディレクトリが存在しません' unless valid_path?
+
     max_row = calc_max_row(files)
     filelist = Array.new(max_row) { Array.new(MAX_COLUMN) }
     i = 0
@@ -40,6 +41,13 @@ class Ls
       output += "\n"
     end
     output
+  end
+
+  def valid_path?
+    Dir.new(@path)
+    true
+  rescue
+    false
   end
 
   def calc_max_row(files)
