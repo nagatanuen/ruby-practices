@@ -38,7 +38,8 @@ class Ls
         output += format("%-#{calc_column_width(files)}s", f)
         output += "\t"
       end
-      output += "\n"
+
+      output = output.strip + "\n"
     end
     output
   end
