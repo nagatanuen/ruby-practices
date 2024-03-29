@@ -9,19 +9,17 @@ class Ls
   end
 
   def display
-    display_without_option
+    return 'エラー：指定されたディレクトリが存在しません' unless FileTest.directory?(@path)
+
+    dir = Dir.new(@path)
+    files = dir.children.sort
+
+    display_without_option(files)
   end
 
   private
 
-  def files
-    dir = Dir.new(@path)
-    dir.children.sort
-  end
-
-  def display_without_option
-    return 'エラー：指定されたディレクトリが存在しません' unless FileTest.directory?(@path)
-
+  def display_without_option(files)
     max_row = calc_max_row(files)
     table = Array.new(max_row) { Array.new(MAX_COLUMN) }
     i = 0
