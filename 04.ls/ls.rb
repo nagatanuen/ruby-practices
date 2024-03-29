@@ -20,7 +20,7 @@ class Ls
   end
 
   def display_without_option
-    return 'エラー：指定されたディレクトリが存在しません' unless valid_path?
+    return 'エラー：指定されたディレクトリが存在しません' unless FileTest.directory?(@path)
 
     max_row = calc_max_row(files)
     table = Array.new(max_row) { Array.new(MAX_COLUMN) }
@@ -42,13 +42,6 @@ class Ls
       output = output.strip + "\n"
     end
     output
-  end
-
-  def valid_path?
-    Dir.new(@path)
-    true
-  rescue
-    false
   end
 
   def calc_max_row(files)
