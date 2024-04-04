@@ -1,23 +1,34 @@
 #!/usr/bin/ruby
 # frozen_string_literal: true
+
+require 'optparse'
 class Ls
   CURRENT_PATH = '.'
   MAX_COLUMN = 3
 
-  def initialize(specified_path)
-    @path = specified_path || CURRENT_PATH
+  def initialize(params)
+    @option = {}
+    opt = OptionParser.new
+    opt.on('-a') { @option[:all] = true }
+    opt.parse!(params)
+    @path = params[0] || CURRENT_PATH
   end
 
   def display
     return 'エラー：指定されたディレクトリが存在しません' unless FileTest.directory?(@path)
 
-    dir = Dir.new(@path)
-    files = dir.children.sort
-
-    display_without_option(files)
+    display_without_option(file_list)
   end
 
   private
+
+  def file_list
+    if @option[:all]
+      Dir.glob('*', File::FNM_DOTMATCH, base: @path, sort: true)
+    else
+      Dir.glob('*', base: @path, sort: true)
+    end
+  end
 
   def display_without_option(files)
     max_row = calc_max_row(files)
@@ -37,7 +48,7 @@ class Ls
         output += "\t"
       end
 
-      output = output.strip + "\n"
+      output = "#{output.strip}\n"
     end
     output
   end
@@ -56,6 +67,6 @@ class Ls
   end
 end
 
-ls = Ls.new(ARGV[0])
+ls = Ls.new(ARGV)
 output = ls.display
 puts output
