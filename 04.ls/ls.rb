@@ -10,6 +10,7 @@ class Ls
     @option = {}
     opt = OptionParser.new
     opt.on('-a') { @option[:all] = true }
+    opt.on('-r') { @option[:reverse] = true }
     opt.parse!(params)
     @path = params[0] || CURRENT_PATH
   end
@@ -23,11 +24,13 @@ class Ls
   private
 
   def file_list
-    if @option[:all]
-      Dir.glob('*', File::FNM_DOTMATCH, base: @path, sort: true)
-    else
-      Dir.glob('*', base: @path, sort: true)
-    end
+    files = if @option[:all]
+              Dir.glob('*', File::FNM_DOTMATCH, base: @path, sort: true)
+            else
+              Dir.glob('*', base: @path, sort: true)
+            end
+
+    @option[:reverse] ? files.reverse : files
   end
 
   def display_without_option(files)
