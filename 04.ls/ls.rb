@@ -60,11 +60,11 @@ class Ls
   end
 
   def display_with_list_option(files)
-    lines = create_line(files)
+    lines = create_lines(files)
     format_lines(lines)
   end
 
-  def create_line(files)
+  def create_lines(files)
     lines = []
 
     files.each do |file|
