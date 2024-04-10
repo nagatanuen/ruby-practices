@@ -65,9 +65,7 @@ class Ls
   end
 
   def create_lines(files)
-    lines = []
-
-    files.each do |file|
+    files.map do |file|
       line = {}
       fs = File.lstat("#{@path}/#{file}")
       mode = fs.mode.to_s(8).rjust(6, '0')
@@ -84,9 +82,8 @@ class Ls
       line[:updated_at] = format_date(fs.mtime.to_s)
       line[:file] = fs.symlink? ? "#{file} -> #{File.readlink("#{@path}/#{file}")}" : file
 
-      lines << line
+      line
     end
-    lines
   end
 
   def format_lines(lines)
@@ -96,12 +93,11 @@ class Ls
     gname_width = calc_column_width(lines, column: :gname)
     size_width = calc_column_width(lines, column: :size)
     updated_at_width = calc_column_width(lines, column: :updated_at)
-    lines.each do |l|
-      output << "#{l[:permission]} #{l[:nlink].rjust(nlink_width)} "\
-                "#{l[:uname].ljust(uname_width)} #{l[:gname].ljust(gname_width)} "\
-                "#{l[:size].rjust(size_width)} #{l[:updated_at].ljust(updated_at_width)} #{l[:file]}"
+    lines.map do |l|
+      "#{l[:permission]} #{l[:nlink].rjust(nlink_width)} "\
+      "#{l[:uname].ljust(uname_width)} #{l[:gname].ljust(gname_width)} "\
+      "#{l[:size].rjust(size_width)} #{l[:updated_at].ljust(updated_at_width)} #{l[:file]}"
     end
-    output
   end
 
   def format_date(date)
@@ -146,16 +142,13 @@ class Ls
       end
     end
 
-    output = ''
-    table.each do |row|
+    table.map do |row|
       row.each do |f|
         output += format("%-#{calc_column_width(files)}s", f)
         output += "\t"
       end
-
-      output = "#{output.strip}\n"
+      "#{output.strip}\n"
     end
-    output
   end
 
   def calc_max_row(files)
@@ -169,7 +162,6 @@ class Ls
 
   def calc_column_width(list, column: nil)
     if column
-      # debugger
       target = list.max_by { |l| l[column].length }
       target[column].length
     else
