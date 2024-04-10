@@ -79,7 +79,7 @@ class Ls
       line[:uname] = Etc.getpwuid(fs.uid).name
       line[:gname] = Etc.getgrgid(fs.gid).name
       line[:size] = fs.size.to_s
-      line[:updated_at] = format_date(fs.mtime.to_s)
+      line[:updated_at] = fs.mtime.strftime('%b %e %H:%M')
       line[:file] = fs.symlink? ? "#{file} -> #{File.readlink("#{@path}/#{file}")}" : file
 
       line
@@ -98,17 +98,6 @@ class Ls
       "#{l[:uname].ljust(uname_width)} #{l[:gname].ljust(gname_width)} "\
       "#{l[:size].rjust(size_width)} #{l[:updated_at].ljust(updated_at_width)} #{l[:file]}"
     end
-  end
-
-  def format_date(date)
-    y = date.slice(0..3)
-    m = date.slice(5..6)
-    d = date.slice(8..9)
-    hh = date.slice(11..12)
-    mm = date.slice(14..15)
-    ss = date.slice(17..18)
-    t = Time.new(y, m, d, hh, mm, ss, '+09:00')
-    t.strftime('%b %e %H:%M')
   end
 
   def file_type(mode)
