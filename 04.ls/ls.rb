@@ -68,13 +68,8 @@ class Ls
     files.map do |file|
       line = {}
       fs = File.lstat("#{@path}/#{file}")
-      mode = fs.mode.to_s(8).rjust(6, '0')
-      type = file_type(mode.slice(0..1))
-      owner = permissions(mode.slice(3))
-      group = permissions(mode.slice(4))
-      other = permissions(mode.slice(5))
 
-      line[:permission] = "#{type}#{special_permissions(mode.slice(2), "#{owner}#{group}#{other}")}"
+      line[:permission] = create_permission(fs)
       line[:nlink] = fs.nlink.to_s
       line[:uname] = Etc.getpwuid(fs.uid).name
       line[:gname] = Etc.getgrgid(fs.gid).name
@@ -87,7 +82,6 @@ class Ls
   end
 
   def format_lines(lines)
-    output = []
     nlink_width = calc_column_width(lines, column: :nlink)
     uname_width = calc_column_width(lines, column: :uname)
     gname_width = calc_column_width(lines, column: :gname)
@@ -100,24 +94,23 @@ class Ls
     end
   end
 
-  def file_type(mode)
-    FILE_TYPE[mode]
-  end
+  def create_permission(fs)
+    mode = fs.mode.to_s(8).rjust(6, '0')
+    type = FILE_TYPE[mode.slice(0..1)]
+    owner = PERMISSION[mode.slice(3)].dup
+    group = PERMISSION[mode.slice(4)].dup
+    other = PERMISSION[mode.slice(5)].dup
 
-  def permissions(mode)
-    PERMISSION[mode]
-  end
-
-  def special_permissions(mode, permission)
-    case mode
+    case mode.slice(2)
     when '1'
-      permission[8] = permission[8] == 'x' ? 't' : 'T'
+      other[2] = other[2] == 'x' ? 't' : 'T'
     when '2'
-      permission[5] = permission[5] == 'x' ? 's' : 'S'
+      group[2] = group[2] == 'x' ? 's' : 'S'
     when '4'
-      permission[2] = permission[2] == 'x' ? 's' : 'S'
+      owner[2] = owner[2] == 'x' ? 's' : 'S'
     end
-    permission
+
+    "#{type}#{owner}#{group}#{other}"
   end
 
   def display_without_list_option(files)
