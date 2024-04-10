@@ -67,15 +67,15 @@ class Ls
   def create_lines(files)
     files.map do |file|
       line = {}
-      fs = File.lstat("#{@path}/#{file}")
+      stat = File.lstat("#{@path}/#{file}")
 
-      line[:permission] = create_permission(fs)
-      line[:nlink] = fs.nlink.to_s
-      line[:uname] = Etc.getpwuid(fs.uid).name
-      line[:gname] = Etc.getgrgid(fs.gid).name
-      line[:size] = fs.size.to_s
-      line[:updated_at] = fs.mtime.strftime('%b %e %H:%M')
-      line[:file] = fs.symlink? ? "#{file} -> #{File.readlink("#{@path}/#{file}")}" : file
+      line[:permission] = create_permission(stat)
+      line[:nlink] = stat.nlink.to_s
+      line[:uname] = Etc.getpwuid(stat.uid).name
+      line[:gname] = Etc.getgrgid(stat.gid).name
+      line[:size] = stat.size.to_s
+      line[:updated_at] = stat.mtime.strftime('%b %e %H:%M')
+      line[:file] = stat.symlink? ? "#{file} -> #{File.readlink("#{@path}/#{file}")}" : file
 
       line
     end
@@ -94,8 +94,8 @@ class Ls
     end
   end
 
-  def create_permission(fs)
-    mode = fs.mode.to_s(8).rjust(6, '0')
+  def create_permission(stat)
+    mode = stat.mode.to_s(8).rjust(6, '0')
     type = FILE_TYPE[mode.slice(0..1)]
     owner = PERMISSION[mode.slice(3)].dup
     group = PERMISSION[mode.slice(4)].dup
@@ -126,8 +126,7 @@ class Ls
 
     table.map do |row|
       row.each do |f|
-        output += format("%-#{calc_column_width(files)}s", f)
-        output += "\t"
+        output + format("%-#{calc_column_width(files)}s", f)
       end
       "#{output.strip}\n"
     end
