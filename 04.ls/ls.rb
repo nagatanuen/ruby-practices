@@ -125,10 +125,7 @@ class Ls
     end
 
     table.map do |row|
-      row.each do |f|
-        output + format("%-#{calc_column_width(files)}s", f)
-      end
-      "#{output.strip}\n"
+      "#{row.map { |f| format("%-#{calc_column_width(files)}s", f) }.join("\t")}\n"
     end
   end
 
